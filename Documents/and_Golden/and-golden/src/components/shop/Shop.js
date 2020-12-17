@@ -1,4 +1,4 @@
-import React from "react"; //, { useEffect, useState }
+import React, {useState} from "react"; //, { useEffect, useState }
 import {
     BrowserRouter as Router,
     Switch,
@@ -10,36 +10,8 @@ import {
 import Product from './Product';
 import axios from 'axios';
 
-// <li>{responseData[0] && responseData[0].name}</li>
-// <li>{responseData[0] && responseData[0].description}</li>
-// <li>{responseData[0] && responseData[0].price}</li>
 
 function Shop() {
-    // let [responseData, setResponseData] = React.useState('');
-    
-
-    // axios({
-    //     "method": "GET",
-    //     "url": "http://localhost:5000/",
-    //     "headers": {
-    //       "content-type": "application/json",
-    //     //   "x-rapidapi-host": "quotes15.p.rapidapi.com",
-    //     //   "x-rapidapi-key": process.env.REACT_APP_API_KEY
-    //     }
-    //     // , "params": {
-    //     //   "name": "Nike Air Forces 1s"
-    //     // }
-    //   })
-    //   .then((response) => {
-    //     setResponseData(response.data)
-        
-    //     // console.log(responseData[0])
-    //   })
-    //   .catch((error) => {
-    //     console.log(error)
-    // })
-
-
     let match = useRouteMatch();
 
 
@@ -72,8 +44,10 @@ function Shop() {
     );
 }
 
+//declaring this function so I can call it into the product page without returning all of the listing in shop
+
 function GetProduct() {
-    let [responseData, setResponseData] = React.useState('');
+    let [responseData, setResponseData] = useState('');
     
 
     axios({
