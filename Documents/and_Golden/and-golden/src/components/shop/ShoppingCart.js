@@ -1,59 +1,70 @@
 import React, { useEffect, useState } from "react";
-// import axios from 'axios';
-//IF Product id appears more than once then add to quanitity -- 
-//GET quanitit to cross check with stock i.e creating a function that if q-s ===<0 then  WRONG
-//Every time an BUY is clicked you count it, and when you count we decrease stock so if b+1 then s-1
-//this should update stock on product page and therefore can not add anythign more
+import axios from 'axios';
 
 function BuyNowButton(props) {
   return (
-    <button type="button">Buy Now</button>
+    <button type="button" onClick={props.buyNow()}>Buy Now</button>
   )
 }
 
 function ShoppingCart() {
+    let total = 0;
+    let shoppingCart = localStorage.getItem('shoppingCart') ? JSON.parse(localStorage.getItem('shoppingCart')) : [];
 
-    if (localStorage.getItem('shoppingCart') === null) {
+  function buy(e) {
+    e.preventDefault();
+    axios.post("http://localhost:5000/buy", shoppingCart)
+      .then((res) => {
+        localStorage.setItem('shoppingCart', []);
+        // Send them to successful page
+      })
+      .catch((error) => {
+        console.error(error)
+      })
+  }
+    
+    if (!shoppingCart.length) {
       return <p>Shopping cart empty</p>
     }else{
-      let shoppingCart = JSON.parse(localStorage.getItem('shoppingCart'));
+      shoppingCart.map(item => { total += item.price * item.quantity })
+      
+      // let shopArr = shoppingCart.map(function(productCart){
+      //   return productCart._id;
+      // })
+      // console.log(shopArr);
 
-      let shopArr = shoppingCart.map(function(productCart){
-        return productCart._id;
-      })
-      console.log(shopArr);
+      // let isDuplicate = shopArr.some(function(product, idx) {
+      //   return shopArr.indexOf(product) !== idx;
+      // })
 
-      let isDuplicate = shopArr.some(function(product, idx) {
-        return shopArr.indexOf(product) !== idx;
-      })
+      // console.log(isDuplicate);
 
-      console.log(isDuplicate);
+      // if(isDuplicate === true) {
+      //   shoppingCart.map(function(productCart){
+      //     return productCart.quantity++;
+      //   })
+      // }
 
-      if(isDuplicate === true) {
-        shoppingCart.map(function(productCart){
-          return productCart.quantity++;
-        })
-      }
-
-      console.log(shoppingCart);
+      // console.log(shoppingCart);
 
       return (
         <div className="ShoppingCart">
           <h2> Shopping Cart</h2>
 
           <div className ="products">
+            <h1>Total: £{(total / 100).toFixed(2)}</h1>
             {shoppingCart.map((productCart, idx)=> (
               <div className="product" key={idx}>
               <ul>
                 <li><img src={"http://localhost:5000/images/" + productCart._id + ".jpeg"} alt={productCart.name + "image"} /></li>
                 <li>{productCart.name}</li>
-                <li>Stock: {productCart.stock}</li>
+                <li>Quantity: {productCart.quantity}</li>
                 <li>£{(productCart.price / 100).toFixed(2)}</li>
               </ul>
               </div>
             ))}
           </div>
-          <BuyNowButton />
+          <BuyNowButton buyNow={(e) => buy}/>
         </div> 
       );
     } 

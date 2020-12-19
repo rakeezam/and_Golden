@@ -8,7 +8,7 @@ import {
   Link
 } from "react-router-dom";
 import './App.css';
-import Header from './components/Header';
+import SiteHeader from './components/Header';
 import Footer from './components/Footer';
 import Home from './components/Home';
 import About from './components/About';
@@ -17,43 +17,46 @@ import Contact from './components/Contact';
 import Error from './components/Error';
 import Product from "./components/shop/Product";
 import ShoppingCart from "./components/shop/ShoppingCart";
+import Container from "react-bootstrap/Container";
 
 
 function App() {
 
     return (
       <Router>
-        <div>
-          <Header/>
-          {/* A <Switch> looks through its children <Route>s and
+        <SiteHeader />
+        <Container>
+          <div>
+            {/* A <Switch> looks through its children <Route>s and
               renders the first one that matches the current URL. */}
 
-          <Switch> 
-            <Route exact path="/">
-              <Home />
-            </Route>
-            <Route path="/about">
-              <About />
-            </Route>
-            <Route path="/shop">
-              <Shop />
-            </Route>
-            <Route path="/contact-us">
-              <Contact />
-            </Route>
-            <Route path="/product/:id">
-              <Product />
-            </Route>
-            <Route path="/shopping-cart">
-            <ShoppingCart />
-            </Route>
-            <Route component={Error}/>
+            <Switch>
+              <Route exact path="/">
+                <Home />
+              </Route>
+              <Route path="/about">
+                <About />
+              </Route>
+              <Route path="/shop">
+                <Shop />
+              </Route>
+              <Route path="/contact-us">
+                <Contact />
+              </Route>
+              <Route path="/product/:id">
+                <Product />
+              </Route>
+              <Route path="/shopping-cart">
+                <ShoppingCart />
+              </Route>
+              <Route component={Error} />
 
 
-          </Switch>
+            </Switch>
 
-          <Footer/>
-        </div>
+          </div>
+        </Container>
+        <Footer />
       </Router>
     );
 }
