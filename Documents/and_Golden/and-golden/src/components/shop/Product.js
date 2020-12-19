@@ -42,17 +42,25 @@ function Product() {
             })
     }, [product.data])
     
-  function handleClick(e) {
+  function handleAddToCart(e) {
     e.preventDefault();
     let cartItemsString = localStorage.getItem('shoppingCart');
-    let cartItemsArray = cartItemsString ? JSON.parse(cartItemsString) : [];
-    cartItemsArray.push(product);
+    let cartItemsArray = cartItemsString ? JSON.parse(cartItemsString) : [product];
+    cartItemsArray.map((item) =>
+    {
+        if (item._id == product._id && item.quantity < product.stock) {
+            item.quantity++
+        }
+    });
 
     localStorage.setItem('shoppingCart', JSON.stringify(cartItemsArray));
     console.log(product._id);
   }
 
-    if (isLoading) {
+    if (errorLoading) {
+        return <h1>Error, couldn't find product</h1>;
+    }
+    else if (isLoading) {
         return <h1>Loading</h1>;
     }
     return (
@@ -63,7 +71,7 @@ function Product() {
                 <li>Stock: {product.stock}</li>
                 <li> £{(product.price / 100).toFixed(2)}</li>
             </ul>
-            <AddToCartButton stock={product.stock} addToCart={(e) => handleClick}></AddToCartButton>
+            <AddToCartButton stock={product.stock} addToCart={(e) => handleAddToCart}></AddToCartButton>
 
         </div>
     );
