@@ -70,6 +70,23 @@ app.get('/stock/:productId', (request, response) => {
         });
 });
 
+app.post('/buy', (request, response) => {
+    request.body.forEach(product => {
+        Product.findOneAndUpdate (
+            { _id: product._id },
+            {
+                $inc:
+                    { stock: -product.quantity }
+            })
+            .then((product) => {
+                response.send({stock : product.stock});
+            })
+            .catch((err) => {
+                response.status(500).send("Something went wrong please retry or contact support");
+            });
+    });
+});
+
 // console.log("Listening on localhost:5000");
 // app.listen(5000);
 
