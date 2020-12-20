@@ -46,14 +46,15 @@ function Product() {
     function handleAddToCart(e) {
         e.preventDefault();
         let cartItemsString = localStorage.getItem('shoppingCart');
-        let cartItemsArray = cartItemsString ? JSON.parse(cartItemsString) : [product];
+        let cartItemsArray = cartItemsString ? JSON.parse(cartItemsString) : [];
         let found = false;
         
         cartItemsArray.map((item) => 
         {
-            if (item._id == product._id && item.quantity < product.stock) {
-                item.quantity++;
+            if (item._id == product._id) {
                 found = true;
+                if(item.quantity < product.stock)
+                    item.quantity++;
                 return;
             }
         });
