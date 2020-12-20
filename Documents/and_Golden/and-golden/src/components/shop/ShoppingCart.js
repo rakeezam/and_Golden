@@ -53,9 +53,9 @@ function ShoppingCart() {
           <h2> Shopping Cart</h2>
           <Row lg={4}>
           {shoppingCart.map((productCart, idx) => (
-            <Col lg={4}>
+            <Col lg={4} key={idx}>
             <Card>
-            <div className="product" key={idx}>
+            <div className="product">
             <Card.Img src={"http://localhost:5000/images/" + productCart._id + ".jpeg"} alt={productCart.name + "image"} />
             <Card.Body>
                 <Card.Title>
