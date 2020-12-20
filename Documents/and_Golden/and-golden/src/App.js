@@ -1,4 +1,3 @@
-
 import React from "react";
 import {
   BrowserRouter as Router,
@@ -18,6 +17,7 @@ import Error from './components/Error';
 import Product from "./components/shop/Product";
 import ShoppingCart from "./components/shop/ShoppingCart";
 import Container from "react-bootstrap/Container";
+import Success from "./components/shop/Success";
 
 
 function App() {
@@ -27,9 +27,6 @@ function App() {
         <SiteHeader />
         <Container>
           <div>
-            {/* A <Switch> looks through its children <Route>s and
-              renders the first one that matches the current URL. */}
-
             <Switch>
               <Route exact path="/">
                 <Home />
@@ -49,14 +46,14 @@ function App() {
               <Route path="/shopping-cart">
                 <ShoppingCart />
               </Route>
+              <Route path="/success">
+                <Success />
+              </Route>
               <Route component={Error} />
-
-
             </Switch>
-
           </div>
         </Container>
-        <Footer />
+        <Footer/>
       </Router>
     );
 }

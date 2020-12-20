@@ -1,8 +1,9 @@
 import React from "react";
+import {Container} from "react-bootstrap";
 
 function Contact() {
     return (
-      <div className="contactUs">
+      <Container className="p-5">
         <h2>Contact Us</h2>
         <ul>
            <li>Contact Number: 020xxxxxxx</li>
@@ -21,7 +22,7 @@ function Contact() {
           <div>
           </div>
         </div>
-      </div>
+      </Container>
     )
   }
 

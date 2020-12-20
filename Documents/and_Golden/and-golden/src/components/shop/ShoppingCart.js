@@ -1,9 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from 'axios';
+// import Success from './Success';
+import {
+  BrowserRouter as Router,
+  Link
+} from "react-router-dom";
+import{Button, Container, Card, CardDeck, Row, Col} from "react-bootstrap";
 
 function BuyNowButton(props) {
   return (
-    <button type="button" onClick={props.buyNow()}>Buy Now</button>
+    <Button onClick={props.buyNow()}>Buy Now</Button>
   )
 }
 
@@ -11,23 +17,70 @@ function ShoppingCart() {
     let total = 0;
     let shoppingCart = localStorage.getItem('shoppingCart') ? JSON.parse(localStorage.getItem('shoppingCart')) : [];
 
-  function buy(e) {
-    e.preventDefault();
-    axios.post("http://localhost:5000/buy", shoppingCart)
-      .then((res) => {
-        localStorage.setItem('shoppingCart', []);
-        // Send them to successful page
-      })
-      .catch((error) => {
-        console.error(error)
-      })
-  }
+    const [isLoading, setIsLoading] = useState(true);
+    const [errorLoading, setHasErrorLoading] = useState(false);
+
+    function buy(e) {
+      e.preventDefault();
+      axios.post("http://localhost:5000/buy", shoppingCart)
+        .then((res) => {
+          localStorage.setItem('shoppingCart', []);
+          // Send them to successful page
+        })
+        .catch((error) => {
+          console.error(error)
+        })
+    }
+
+    // if (errorLoading) {
+    //   return <h1>Error, couldn't find product</h1>;
+    // }
+    // else if (isLoading) {
+    //     return <h1>Loading</h1>;
+    // }
     
     if (!shoppingCart.length) {
-      return <p>Shopping cart empty</p>
+      return (<p>Shopping cart empty</p>)
     }else{
       shoppingCart.map(item => { total += item.price * item.quantity })
-      
+
+
+      return (
+        <Container className="p-5 mb-4">
+          <h2> Shopping Cart</h2>
+          <Row lg={4}>
+          {shoppingCart.map((productCart, idx) => (
+            <Col lg={4}>
+            <Card>
+            <div className="product" key={idx}>
+            <Card.Img src={"http://localhost:5000/images/" + productCart._id + ".jpeg"} alt={productCart.name + "image"} />
+            <Card.Body>
+                <Card.Title>
+                  {productCart.name}
+                  <Card.Text>£{(productCart.price / 100).toFixed(2)}</Card.Text>
+                </Card.Title>
+                <ul className="list-unstyled mb-2 text-muted text-uppercase small">
+                  <li>Quantity: {productCart.quantity}</li>
+                </ul>
+            </Card.Body>
+            </div>
+            </Card>
+            </Col>
+          )
+          )}
+          </Row>
+          <Row className="float-right">
+            <h5>Total: £{(total / 100).toFixed(2)}</h5>
+                <BuyNowButton buyNow={(e) => buy}></BuyNowButton>
+          </Row>
+  
+        </Container> 
+      );
+    } 
+  }
+
+export default ShoppingCart;
+
       // let shopArr = shoppingCart.map(function(productCart){
       //   return productCart._id;
       // })
@@ -46,71 +99,3 @@ function ShoppingCart() {
       // }
 
       // console.log(shoppingCart);
-
-      return (
-        <div className="ShoppingCart">
-          <h2> Shopping Cart</h2>
-
-          <div className ="products">
-            <h1>Total: £{(total / 100).toFixed(2)}</h1>
-            {shoppingCart.map((productCart, idx)=> (
-              <div className="product" key={idx}>
-              <ul>
-                <li><img src={"http://localhost:5000/images/" + productCart._id + ".jpeg"} alt={productCart.name + "image"} /></li>
-                <li>{productCart.name}</li>
-                <li>Quantity: {productCart.quantity}</li>
-                <li>£{(productCart.price / 100).toFixed(2)}</li>
-              </ul>
-              </div>
-            ))}
-          </div>
-          <BuyNowButton buyNow={(e) => buy}/>
-        </div> 
-      );
-    } 
-  }
-
-export default ShoppingCart;
-
-    // function NotSure() {
-    //     // let [shoppingCart, setQuant] = useState(shoppingCart)
-
-    //     let result = shoppingCart.map(productCart=> {
-    //                       if (productCart._id === productCart._id) {
-    //                         productCart.quantity++ 
-    //                       }else{
-    //                         productCart.quantity = 1;
-    //                       }
-    //                   })
-    //     console.log(result);
-        
-
-    // }
-    // NotSure();
-
-
-
-
-// let url = "http://localhost:5000/";
-// const [product, setResponseData] = useState({});
-// const [isLoading, setIsLoading] = useState(true);
-// const [errorLoading, setHasErrorLoading] = useState(false);
-
-// useEffect(() => {
-//   axios({
-//       "method": "GET",
-//       "url": url,
-//       "headers": {
-//           "content-type": "application/json",
-//       }
-//   })
-//       .then((product) => {
-//           console.log(product.data)
-//           setResponseData(product.data);
-//           setIsLoading(false);
-//       })
-//       .catch((error) => {
-//           console.log(error)
-//           setHasErrorLoading(true);
-//       })
-// }, [product.data])
