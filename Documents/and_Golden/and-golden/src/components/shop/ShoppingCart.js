@@ -2,8 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from 'axios';
 // import Success from './Success';
 import {
-  BrowserRouter as Router,
-  Link
+  Redirect
 } from "react-router-dom";
 import{Button, Container, Card, CardDeck, Row, Col} from "react-bootstrap";
 
@@ -17,6 +16,7 @@ function ShoppingCart() {
     let total = 0;
     let shoppingCart = localStorage.getItem('shoppingCart') ? JSON.parse(localStorage.getItem('shoppingCart')) : [];
 
+    const [redirect, setRedirect] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
     const [errorLoading, setHasErrorLoading] = useState(false);
 
@@ -25,7 +25,7 @@ function ShoppingCart() {
       axios.post("http://localhost:5000/buy", shoppingCart)
         .then((res) => {
           localStorage.setItem('shoppingCart', []);
-          // Send them to successful page
+          setRedirect("/success");
         })
         .catch((error) => {
           console.error(error)
@@ -38,10 +38,13 @@ function ShoppingCart() {
     // else if (isLoading) {
     //     return <h1>Loading</h1>;
     // }
-    
-    if (!shoppingCart.length) {
+    if (redirect) {
+      return <Redirect to={redirect} />
+    }
+    else if (!shoppingCart.length) {
       return (<p>Shopping cart empty</p>)
-    }else{
+    }
+    else{
       shoppingCart.map(item => { total += item.price * item.quantity })
 
 
